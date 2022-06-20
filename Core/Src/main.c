@@ -591,7 +591,7 @@ void StartDefaultTask(void const * argument)
 		//WM8978_Palyer3("51.wav");
 		//Audio_Player_Start("51");
 		HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_4);
-    	xEventGroupSetBits(Event_Handle,KEY1_EVENT);
+    //	xEventGroupSetBits(Event_Handle,KEY1_EVENT);
 		osDelay(100);
 	}
   /* USER CODE END 5 */
