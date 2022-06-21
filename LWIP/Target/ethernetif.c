@@ -648,16 +648,13 @@ void ethernetif_set_link(void const *argument)
     {
       /* network cable is connected */
       netif_set_link_up(link_arg->netif);
-
     }
     else if(netif_is_link_up(link_arg->netif) && (!regvalue))
     {
       /* network cable is dis-connected */
       netif_set_link_down(link_arg->netif);
-
     }
-  	xEventGroupSetBits(Event_Handle,KEY1_EVENT);
-
+	xEventGroupSetBits(Event_Handle,KEY1_EVENT);
 
     /* Suspend thread for 200 ms */
     osDelay(200);

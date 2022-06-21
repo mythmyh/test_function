@@ -71,7 +71,7 @@ char filename[] = "abc.txt"; // ??
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c2;
+I2C_HandleTypeDef hi2c1;
 
 I2S_HandleTypeDef hi2s2;
 DMA_HandleTypeDef hdma_spi2_tx;
@@ -94,7 +94,7 @@ osThreadId myTask02Handle;
 
 PUTCHAR_PROTOTYPE
 {
-    //注意下面第一个参数是&husart1，因为cubemx配置了串�??1自动生成�??
+    //注意下面第一个参数是&husart1，因为cubemx配置了串�???1自动生成�???
     HAL_UART_Transmit(&huart1, (uint8_t*)&ch, 1, HAL_MAX_DELAY);
     return ch;
 }
@@ -124,8 +124,8 @@ static void MX_USART1_UART_Init(void);
 static void MX_DMA_Init(void);
 static void MX_SDIO_SD_Init(void);
 static void MX_I2S2_Init(void);
-static void MX_I2C2_Init(void);
 static void MX_IWDG_Init(void);
+static void MX_I2C1_Init(void);
 void StartDefaultTask(void const * argument);
 void StartTask02(void const * argument);
 
@@ -145,7 +145,7 @@ void StartTask02(void const * argument);
 //  int i=0;
 //	         /* 任何其他处理... */
 //
-//	         /* 定期或请求式填充输出�???????????????????????????????? */
+//	         /* 定期或请求式填充输出�????????????????????????????????? */
 //	 for(;;){
 //
 //		 ret=f_read(&File,data,4,&bw);
@@ -211,8 +211,8 @@ int main(void)
   MX_SDIO_SD_Init();
   MX_FATFS_Init();
   MX_I2S2_Init();
-  MX_I2C2_Init();
   MX_IWDG_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
 //  int iwdg_flag=0;
@@ -332,36 +332,36 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief I2C2 Initialization Function
+  * @brief I2C1 Initialization Function
   * @param None
   * @retval None
   */
-static void MX_I2C2_Init(void)
+static void MX_I2C1_Init(void)
 {
 
-  /* USER CODE BEGIN I2C2_Init 0 */
+  /* USER CODE BEGIN I2C1_Init 0 */
 
-  /* USER CODE END I2C2_Init 0 */
+  /* USER CODE END I2C1_Init 0 */
 
-  /* USER CODE BEGIN I2C2_Init 1 */
+  /* USER CODE BEGIN I2C1_Init 1 */
 
-  /* USER CODE END I2C2_Init 1 */
-  hi2c2.Instance = I2C2;
-  hi2c2.Init.ClockSpeed = 100000;
-  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c2.Init.OwnAddress1 = 0;
-  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c2.Init.OwnAddress2 = 0;
-  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN I2C2_Init 2 */
+  /* USER CODE BEGIN I2C1_Init 2 */
 
-  /* USER CODE END I2C2_Init 2 */
+  /* USER CODE END I2C1_Init 2 */
 
 }
 
@@ -522,7 +522,6 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -588,11 +587,11 @@ void StartDefaultTask(void const * argument)
 	/* Infinite loop */
 	for (;;) {
 		//不用dma会有噪音
-		//WM8978_Palyer3("51.wav");
-		//Audio_Player_Start("51");
+		//WM8978_Palyer3("52.wav");
+		//Audio_Player_Start("52");
 		HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_4);
     //	xEventGroupSetBits(Event_Handle,KEY1_EVENT);
-		osDelay(100);
+		osDelay(2000);
 	}
   /* USER CODE END 5 */
 }
@@ -615,9 +614,6 @@ void StartTask02(void const * argument)
 		//HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET);
 		HAL_GPIO_TogglePin(GPIOG,GPIO_PIN_9);
 		HAL_IWDG_Refresh(&hiwdg);
-
-
-
 		   r_event=xEventGroupWaitBits(Event_Handle,KEY1_EVENT,pdTRUE,pdTRUE,osWaitForever);
 			    if((r_event&(KEY1_EVENT))==(KEY1_EVENT)){
 			    	printf("run normally !!\r\n");

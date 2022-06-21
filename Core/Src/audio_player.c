@@ -17,7 +17,7 @@ extern UART_HandleTypeDef huart1;
 #define	WM8978_ADDRESS				0x1A
 #define	WM8978_WIRTE_ADDRESS		(WM8978_ADDRESS << 1 | 0)
 extern FIL abc;
-extern I2C_HandleTypeDef hi2c2;
+extern I2C_HandleTypeDef hi2c1;
 extern I2S_HandleTypeDef hi2s2;
 extern DMA_HandleTypeDef hdma_spi2_tx;
 extern FATFS fs;
@@ -55,7 +55,7 @@ HAL_StatusTypeDef WM8978_Register_Wirter(uint8_t reg_addr, uint16_t data)
 
 	pData[0] = (reg_addr << 1) | ((data >> 8) & 0x01);
 	pData[1] = data & 0xFF;
-	return HAL_I2C_Master_Transmit(&hi2c2, WM8978_WIRTE_ADDRESS, pData, 2, 1000);
+	return HAL_I2C_Master_Transmit(&hi2c1, WM8978_WIRTE_ADDRESS, pData, 2, 1000);
 }
 
 

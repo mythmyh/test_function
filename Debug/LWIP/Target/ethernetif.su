@@ -9,5 +9,5 @@ ethernetif.c:563:7:ethernetif_init	16	static
 ethernetif.c:610:7:sys_jiffies	8	static
 ethernetif.c:621:7:sys_now	8	static
 ethernetif.c:633:6:ethernetif_set_link	24	static
-ethernetif.c:678:6:ethernetif_update_config	24	static
-ethernetif.c:766:13:ethernetif_notify_conn_changed	16	static
+ethernetif.c:675:6:ethernetif_update_config	24	static
+ethernetif.c:763:13:ethernetif_notify_conn_changed	16	static
