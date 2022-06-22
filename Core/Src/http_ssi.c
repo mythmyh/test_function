@@ -139,22 +139,22 @@ const char *CGIForm_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 
 
 
-//
-//		if(interrupt[0]=='1'){
-//		//置为0 可以打断
-//		HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
-//		Audio_Player_Start(name);
-//		}else{
-//			  if(HAL_GPIO_ReadPin(GPIOG,GPIO_PIN_9) == 0){
-//
-//				  //置为0不可以打断
-//									  HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
-//										Audio_Player_Start(name);
-//
-//
-//			 }
-//
-//		}
+
+		if(interrupt[0]=='1'){
+		//置为0 可以打断
+		HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
+		Audio_Player_Start(name);
+		}else{
+			  if(HAL_GPIO_ReadPin(GPIOG,GPIO_PIN_9) == 0){
+
+				  //置为0不可以打断
+									  HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
+										Audio_Player_Start(name);
+
+
+			 }
+
+		}
 
 
 	}

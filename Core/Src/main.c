@@ -612,7 +612,6 @@ void StartTask02(void const * argument)
 	for (;;) {
 		osDelay(3000);//拉长
 		//HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET);
-		HAL_GPIO_TogglePin(GPIOG,GPIO_PIN_9);
 		HAL_IWDG_Refresh(&hiwdg);
 		   r_event=xEventGroupWaitBits(Event_Handle,KEY1_EVENT,pdTRUE,pdTRUE,osWaitForever);
 			    if((r_event&(KEY1_EVENT))==(KEY1_EVENT)){
