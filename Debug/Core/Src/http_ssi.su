@@ -1,6 +1,6 @@
 http_ssi.c:28:10:ssi_handler	24	static
 http_ssi.c:53:6:write_data	592	static
 http_ssi.c:95:13:CGIForm_Handler	32	static
-http_ssi.c:201:13:CGIVolume_Handler	32	static
-http_ssi.c:224:13:CGISetIP_Handler	104	static
-http_ssi.c:318:6:http_server_init	8	static
+http_ssi.c:198:13:CGIVolume_Handler	32	static
+http_ssi.c:221:13:CGISetIP_Handler	104	static
+http_ssi.c:315:6:http_server_init	8	static

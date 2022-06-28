@@ -129,9 +129,6 @@ const char *CGIForm_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 		if(circule[0]=='1'){
 
 
-				Audio_Player_Start(name);
-
-
 		}else{
 			circule[0]=='0';
 		}

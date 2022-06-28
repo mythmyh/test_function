@@ -333,7 +333,7 @@ void Audio_Player_Start(const char* filename[])
 		strcat(audioname,file_prefix);
 		strcat(audioname,filename);
 		strcat(audioname,end);
-		HAL_UART_Transmit(&huart1,"zzz",30,100);
+		HAL_UART_Transmit(&huart1,"zzz",3,100);
 	    f_open(&abc,audioname, FA_READ);
 		f_lseek(&abc,600);
 		WAV_FileRead2((uint8_t*) I2S_Buf0, sizeof(I2S_Buf0));
