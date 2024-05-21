@@ -79,8 +79,8 @@ all: main-build
 main-build: test_function.elf secondary-outputs
 
 # Tool invocations
-test_function.elf: $(OBJS) $(USER_OBJS) D:\stm32_temp\test_functionzrtos\test_functionz\STM32F407ZGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "test_function.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\stm32_temp\test_functionzrtos\test_functionz\STM32F407ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="test_function.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+test_function.elf: $(OBJS) $(USER_OBJS) D:\stm32_temp\test_functionzrtos\test_functionz_old\STM32F407ZGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "test_function.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\stm32_temp\test_functionzrtos\test_functionz_old\STM32F407ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="test_function.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

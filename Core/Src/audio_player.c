@@ -23,10 +23,8 @@ extern DMA_HandleTypeDef hdma_spi2_tx;
 extern FATFS fs;
 extern UART_HandleTypeDef huart1;
 
-uint16_t I2S3[BUFFER_SIZE] = { 0 };
-uint16_t I2S[BUFFER_SIZE] = { 0 };
 
-uint16_t I2S1[BUFFER_SIZE] = { 0 };
+
 
 uint8_t audioname [30];
 extern DMA_HandleTypeDef hdma_sdio_rx;
@@ -42,7 +40,8 @@ char file_prefix[12]="0:\\Shiyan\\";
 
 char end[4]=".wav";
 
-
+UINT bw;
+int i;
 
 static void DMAEx_XferCpltCallback(struct __DMA_HandleTypeDef *hdma);
 static void DMAEx_XferM1CpltCallback(struct __DMA_HandleTypeDef *hdma);
@@ -67,86 +66,9 @@ void WAV_FileInit(void)
 }
 
 
-
-
-void WM8978_Palyer(void)
-{
-	uint32_t DataLength = 0;
-	uint8_t* DataAddress = NULL;
-	uint16_t* TempAddress = NULL;
-
-	DataLength = sizeof(data) - 0x2c;
-	DataAddress = (unsigned char *)(data + 0x2c);
-	TempAddress = (uint16_t*)DataAddress;
-
-	while(1)
-	{
-		HAL_I2S_Transmit(&hi2s2, TempAddress, BUFFER_SIZE / 2, 1000);
-		DataLength -= BUFFER_SIZE;
-		TempAddress += (BUFFER_SIZE / 2);
-		if(DataLength < BUFFER_SIZE) break;
-	}
-}
-
-void WM8978_Palyer3(char *filename[])
-{
-	FIL File;
-	char file_prefix[12]="0:\\Shiyan\\";
-	f_mount(&fs,"0:",1);
-	strcat(file_prefix,"0:\\Shiyan\\");
-    f_open(&File,file_prefix, FA_READ);
-	int ret;
-	UINT bw;
-	while(1)
-	{
-		//HAL_Delay(1);
-
-		ret=f_read(&File,I2S,BUFFER_SIZE,&bw);
-		HAL_I2S_Transmit(&hi2s2, I2S, BUFFER_SIZE/2, 1000);
-
-        int i=0;
-		 if(ret||bw==0){
-			 if(bw<BUFFER_SIZE)//不够数据了,补充0
-			 		{
-			 			for(i=bw;i<BUFFER_SIZE-bw;i++)I2S[i]=0;
-			 		}
-				HAL_I2S_Transmit(&hi2s2, I2S, BUFFER_SIZE/2, 1000);
-				break;
-		 }
-
-	}
-}
-
-
-
-
-
-
-uint32_t WAV_FileRead(uint8_t *buf, uint32_t size)
-{
-	uint32_t Playing_End = 0;
-
-	if (DataLength >= size)
-	{
-		memcpy(buf, DataAddress, size);
-		DataLength -= size;
-		DataAddress += size;
-		Playing_End = 1;
-	}
-	else
-	{
-		memcpy(buf, DataAddress, DataLength);
-		Playing_End = 0;
-	}
-
-	return Playing_End;
-}
-
-
 uint32_t WAV_FileRead2(uint8_t *buf, uint32_t size)
 {
-	UINT bw;
-    int i;
+bw=0;
 	 f_read(&abc,buf,size,&bw);//16bit音频,直接读取数据
 	 if(bw==0){
 			 if(bw<BUFFER_SIZE)//不够数据了,补充0
@@ -154,25 +76,14 @@ uint32_t WAV_FileRead2(uint8_t *buf, uint32_t size)
 			 			for(i=bw;i<BUFFER_SIZE-bw;i++)buf[i]=0;
 			 		}
 			 f_close(&abc);
+				HAL_UART_Transmit(&huart1,"ddd",3,100);
+
 			  HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_RESET);
 
 			 return 0;
 		 }
 
-	//	memcpy(buf,I2S3,size);
 
-//	if (DataLength >= size)
-//	{
-//		memcpy(buf, I2S, size);
-//		DataLength -= size;
-//		DataAddress += size;
-//		Playing_End = 1;
-//	}
-//	else
-//	{
-//		memcpy(buf, DataAddress, DataLength);
-//		Playing_End = 0;
-//	}
 
 	return 1;
 }
@@ -260,7 +171,6 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMAEx(I2S_HandleTypeDef *hi2s, uint16_t *Firs
 
 
 
-
 static void DMAEx_XferCpltCallback(struct __DMA_HandleTypeDef *hdma)
 {
 
@@ -333,13 +243,14 @@ void Audio_Player_Start(const char* filename[])
 		strcat(audioname,file_prefix);
 		strcat(audioname,filename);
 		strcat(audioname,end);
-		HAL_UART_Transmit(&huart1,"zzz",3,100);
+		//HAL_UART_Transmit(&huart1,"zzz",3,100);
 	    f_open(&abc,audioname, FA_READ);
+		//HAL_UART_Transmit(&huart1,"aaa",3,100);
 		f_lseek(&abc,600);
+		//HAL_UART_Transmit(&huart1,"bbb",3,100);
 		WAV_FileRead2((uint8_t*) I2S_Buf0, sizeof(I2S_Buf0));
 		WAV_FileRead2((uint8_t*) I2S_Buf1, sizeof(I2S_Buf1));
 		HAL_I2S_Transmit_DMAEx(&hi2s2, I2S_Buf0, I2S_Buf1, BUFFER_SIZE);
-	HAL_I2S_Transmit_DMAEx(&hi2s2, I2S_Buf0, I2S_Buf1, BUFFER_SIZE);
 }
 
 void Audio_Player_Pause(void)

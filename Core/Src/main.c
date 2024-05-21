@@ -21,7 +21,7 @@
 #include "cmsis_os.h"
 #include "fatfs.h"
 #include "lwip.h"
-
+#include "malloc.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lwip/apps/httpd.h"
@@ -37,7 +37,7 @@ FIL abc;
 #define STEP 64
 #define BLOCK_START_ADDR 0
 #define NUM_OF_BLOCKS 1
-#define NAME  "0:\\Shiyan\\sing.wav"
+//#define NAME  "0:\\Shiyan\\sing.wav"
 
 #define BUFFER_WORDS_SIZE ((BLOCKSIZE*NUM_OF_B  LOCKS)>>2)
 
@@ -51,14 +51,14 @@ extern uint16_t I2S_Buf1[BUFFER_SIZE];
 #define KEY2_EVENT (0x01<<1)
 EventGroupHandle_t Event_Handle=NULL;
 
-FIL abc2;
+//FIL abc2;
 FATFS fs;                 //????
 FIL fil;                  // ????
 uint32_t byteswritten;    // ?????
 uint32_t bytesread;       // ?????
-uint8_t wtext[] = "我就是那张SD!"; // ????
-FIL abc3;
-char filename[] = "abc.txt"; // ??
+//uint8_t wtext[] = "我就是那张SD!"; // ????
+//FIL abc3;
+//char filename[] = "abc.txt"; // ??
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -216,7 +216,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 //  int iwdg_flag=0;
-	// HAL_UART_Transmit(&huart1,"restart!!\r\n",7,HAL_MAX_DELAY);
+	//   (&huart1,"restart!!\r\n",7,HAL_MAX_DELAY);
 	// unsigned char data_wr[12]={192,168,3,246,255,255,255,0,192,168,3,1};
 	//  f_mount(&fs,"0:",1);
 	//  write_data(data_wr);
@@ -224,6 +224,7 @@ int main(void)
 	// Audio_Player_Init();
 	// MX_LWIP_Init();
 	// http_server_init();
+	//my_mem_init(SRAMIN);			//鲁玫脢录禄炉脛脷虏驴脛脷麓忙鲁脴
 
 	printf("111111\r\n");
 	printf("222222\r\n");
@@ -250,6 +251,11 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
+
+
+	    	//FIL * f_rec;
+		Audio_Player_Init();
+
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 3000);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
@@ -576,22 +582,14 @@ void StartDefaultTask(void const * argument)
 {
   /* init code for LWIP */
   /* USER CODE BEGIN 5 */
-	unsigned char data_wr[12] = { 192, 168, 3, 246, 255, 255, 255, 0, 192, 168,
-			3, 1 };
+
 	f_mount(&fs,"0:",1);
-	write_data(data_wr);
-	read_data(data_re);
-	Audio_Player_Init();
 	MX_LWIP_Init();
 	http_server_init();
 	/* Infinite loop */
 	for (;;) {
-		//不用dma会有噪音
-		//WM8978_Palyer3("52.wav");
-		//Audio_Player_Start("52");
-		HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_4);
-    //	xEventGroupSetBits(Event_Handle,KEY1_EVENT);
-		osDelay(2000);
+
+		osDelay(7000);
 	}
   /* USER CODE END 5 */
 }
@@ -606,23 +604,13 @@ void StartDefaultTask(void const * argument)
 void StartTask02(void const * argument)
 {
   /* USER CODE BEGIN StartTask02 */
-	EventBits_t r_event;
+	//EventBits_t r_event;
+	//Audio_Player_Init();
 
 	/* Infinite loop */
 	for (;;) {
 		osDelay(3000);//拉长
-		//HAL_GPIO_WritePin(GPIOE, GPIO_PIN_4, GPIO_PIN_SET);
 		HAL_IWDG_Refresh(&hiwdg);
-		   r_event=xEventGroupWaitBits(Event_Handle,KEY1_EVENT,pdTRUE,pdTRUE,osWaitForever);
-			    if((r_event&(KEY1_EVENT))==(KEY1_EVENT)){
-			    	printf("run normally !!\r\n");
-			    }else{
-
-			    	printf("EVENT error!\r\n");
-			    }
-
-
-
 	}
   /* USER CODE END StartTask02 */
 }

@@ -1,0 +1,6 @@
+http_ssi-20230311.c:28:10:ssi_handler	24	static
+http_ssi-20230311.c:53:6:write_data	592	static
+http_ssi-20230311.c:95:13:CGIForm_Handler	32	static
+http_ssi-20230311.c:196:13:CGIVolume_Handler	32	static
+http_ssi-20230311.c:219:13:CGISetIP_Handler	104	static
+http_ssi-20230311.c:313:6:http_server_init	8	static

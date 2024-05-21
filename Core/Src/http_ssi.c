@@ -50,23 +50,7 @@ uint16_t ssi_handler (int iIndex, char *pcInsert, int iInsertLen)
 	return 0;
 }
 
-void write_data(unsigned char *data)
-{
-	FIL File;
-	UINT bw;
-	int ret;
-	char i;
-	f_unlink("0:\\Shiyan\\tianqi.dat");
-	ret = f_open(&File, "0:\\Shiyan\\tianqi.dat", FA_CREATE_NEW | FA_WRITE);
-	ret |= f_lseek(&File, 0);
 
-	for(i=0;i<12;i++)
-	{
-		ret |= f_lseek(&File, 0+i);
-		ret |= f_write(&File,data+i,1 , &bw);
-	}
-	ret |= f_close(&File);
-}
 
 
 /************************ CGI HANDLER ***************************/
@@ -126,13 +110,6 @@ const char *CGIForm_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 					}
 
 		}
-		if(circule[0]=='1'){
-
-
-		}else{
-			circule[0]=='0';
-		}
-
 
 
 
@@ -141,12 +118,17 @@ const char *CGIForm_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 		//置为0 可以打断
 		HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
 		Audio_Player_Start(name);
+		HAL_UART_Transmit(&huart1,"GGG",3,100);
+
 		}else{
 			  if(HAL_GPIO_ReadPin(GPIOG,GPIO_PIN_9) == 0){
 
 				  //置为0不可以打断
-									  HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
-										Audio_Player_Start(name);
+			HAL_GPIO_WritePin(GPIOG,GPIO_PIN_9,GPIO_PIN_SET);
+									//改用uart播放模块
+									  //Audio_Player_Start(name);
+				HAL_UART_Transmit(&huart1,"zzzzz",3,100);
+
 
 
 			 }
@@ -162,7 +144,7 @@ const char *CGIForm_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 
 
 
-//有效，此段代码可以重启网卡
+//有效，此段代码可以重启网卡ca
 //	ip4_addr_t ipaddr;
 //	ip4_addr_t netmask;
 //	ip4_addr_t gw;
@@ -190,7 +172,7 @@ const char *CGIForm_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 //	  netif_set_up(&gnetif);
 
 
-	return "/play.html";
+	return "";
 }
 
 
@@ -298,10 +280,10 @@ const char *CGISetIP_Handler(int iIndex, int iNumParams, char *pcP[], char *pcV[
 		  	  /* 网口可以重启,也可以不重启 */
 		  	  netif_set_down(&gnetif);
 		  	  netif_set_up(&gnetif);
-	 	  f_mount(&fs,"0:",1);
+	 	 // f_mount(&fs,"0:",1);
 
 
-	 	  write_data(ip);
+	 	 // write_data(ip);
 
 
 	return "/play.html";
